@@ -18,6 +18,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * 
+ * 게임이 끝난 후 할 활동을 불러오는 클래스.
+ * 아직 미구현 및 DB의 자료가 저장될 예정.
+ *
+ */
+
 class GameOver extends Frame implements ActionListener {
 
 	Label score = new Label();
@@ -25,10 +32,10 @@ class GameOver extends Frame implements ActionListener {
 	Button output = new Button("최고랭킹 확인");
 	Button restart = new Button("재시작");
 	String ini = "";
-	String x; // 다른 메소드에서 정수형 변수 p를 txt파일로 저장하기 위한 스트링 변수
+	String x;
 
 	GameOver(int p) {
-		x = Integer.toString(p); // 정수형 p값을 스트링으로 변환
+		x = Integer.toString(p);
 		setLocation(250, 80);
 		setResizable(false);
 		setBackground(Color.white);
@@ -55,48 +62,44 @@ class GameOver extends Frame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		try {
-			BufferedWriter in = new BufferedWriter(new FileWriter("out.txt", true)); // out.txt
-																						// 파일
-																						// 생성
-
-			in.write(x); // 획득한 점수들 txt파일에 저장
+			BufferedWriter in = new BufferedWriter(new FileWriter("out.txt", true));
+			in.write(x);
 			in.newLine();
 			in.close();
 
 		} catch (IOException e1) {
-			System.err.println(e1); // 에러가 있다면 메시지 출력
+			System.err.println(e1);
 			System.exit(1);
 		}
 		if (e.getActionCommand().equals("최고랭킹 확인")) {
-			ArrayList<Integer> aList = new ArrayList(); // 점수들 넣기 위한 배열리스트
+			ArrayList<Integer> aList = new ArrayList();
 			String l;
 			String str;
 			int i;
 			try {
-				BufferedReader out = new BufferedReader(new FileReader("out.txt")); // 텍스트
-																					// 파일
-																					// 읽기
-				while ((l = out.readLine()) != null) { // 텍스트 파일에 공백이 없다면
-					i = Integer.parseInt(l); // 스트링값을 정수형 변수로 바꾼 뒤
-					aList.add(i); // 배열리스트에 추가
+				BufferedReader out = new BufferedReader(new FileReader("out.txt"));
+
+				while ((l = out.readLine()) != null) { 
+					i = Integer.parseInt(l);
+					aList.add(i);
 				}
 				out.close();
 
 			} catch (IOException e1) {
-				System.err.println(e1); // 에러가 있다면 메시지 출력
+				System.err.println(e1);
 				System.exit(1);
 			}
-			Collections.sort(aList); // 점수들을 정렬시켜 제일 최고점수를 찾는다.
-			for (int a : aList) { // 배열리스트 안에 있는 정수형 변수들을
-				str = Integer.toString(a); // 스트링으로 변환시켜서
-				rank.setText("최고 기록 : " + str); // 최고 점수를 출력한다.
+			Collections.sort(aList);
+			for (int a : aList) {
+				str = Integer.toString(a);
+				rank.setText("최고 기록 : " + str);
 			}
 
 		}
 
 		if (e.getActionCommand().equals("재시작")) {
 
-			Game rg = new Game();
+		
 			dispose();
 			setVisible(false);
 		}
